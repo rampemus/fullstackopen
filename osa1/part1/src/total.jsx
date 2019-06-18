@@ -2,10 +2,12 @@
 import React from 'react'
 
 const Total = (props) => {
+    let sum = 0
+    for ( let i = 0; i < props.parts.length; i++) {
+        sum += props.parts[i].exercises
+    }
     return (
-            <p>
-              Number of exercises {props.exercises.reduce((a, b) => a + b, 0)}
-            </p>
+            <div>Total of exercises is {sum}</div>
     )
 }
 
