@@ -1,40 +1,71 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 // import Header from './header.jsx'
 // import Content from './content.jsx'
 // import Total from './total.jsx'
 
+const History = (props) => {
+  if (props.allClicks.length === 0) {
+    return (
+      <div>
+        the app is used by pressing the buttons
+      </div>
+    )
+  }
 
-const Hello = (props) => {
+  return (
+    <div>
+      button press history: {props.allClicks.join(' ')}
+    </div>
+  )
+}
 
-    const {name, age} = props
+const Button = ({handleClick, text}) => (
+    <button onClick={handleClick}>
+        {text}
+    </button>
+)
 
-    const bornYear = () => {
-        const yearNow = new Date().getFullYear()
-        return yearNow - age
+const App = (props) => {
+
+    const[clicks, setClicks] = useState({
+        left: 0, right: 0
+    })
+    const [allClicks, setAll] = useState([])
+
+    const handleLeftClick = () => {
+        setAll(allClicks.concat('L'))
+        const newClicks = {
+            ...clicks,
+            left: clicks.left + 1,
+        }
+        setClicks(newClicks)
+    }
+
+    const handleRightClick = () => {
+        setAll(allClicks.concat('R'))
+        console.log('R')
+        const newClicks = {
+            ...clicks,
+            right: clicks.right + 1,
+        }
+        setClicks(newClicks)
     }
 
     return (
         <div>
-            <p>
-                Hello {name}, you are {age} years old
-            </p>
-            <p>So you were probably born {bornYear()}</p>
+            <div>
+                {clicks.left}
+                <Button handleClick={handleLeftClick} text='left' />
+                <Button handleClick={handleRightClick} text='right' />
+                {clicks.right}
+                <History allClicks={allClicks} />
+            </div>
         </div>
     )
 }
 
-const App = () => {
-    const nimi = 'Pekka'
-    const ika = 10
-
-    return (
-        <div>
-            <h1>Greetings</h1>
-            <Hello name="Arto" age={26 + 10} />
-            <Hello name={nimi} age={ika} />
-        </div>
-    )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(
+    <App />,
+    document.getElementById('root')
+)
