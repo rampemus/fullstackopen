@@ -1,71 +1,81 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-// import Header from './header.jsx'
-// import Content from './content.jsx'
-// import Total from './total.jsx'
+import './index.css'
 
-const History = (props) => {
-  if (props.allClicks.length === 0) {
-    return (
-      <div>
-        the app is used by pressing the buttons
-      </div>
-    )
-  }
+const StatisticsTable = (props) => {
 
-  return (
-    <div>
-      button press history: {props.allClicks.join(' ')}
-    </div>
-  )
+    const good = props.good
+    const neutral = props.neutral
+    const bad = props.bad
+
+    const total = good + neutral + bad
+    const average = (total === 0 ? '0' : ( good - bad ) / total)
+    const positiveProsentage = (total === 0 ? '0' : good / total * 100 )  + ' %'
+
+    if ( total === 0) {
+        return(
+            <div>
+                <p>no feedback given</p>
+            </div>
+        )
+    } else {
+        return(
+            <div>
+                <table>
+                    <tbody>
+                        <StatisticsRow text='good' value={good} />
+                        <StatisticsRow text='neutral' value={neutral} />
+                        <StatisticsRow text='bad' value={bad} />
+                        <StatisticsRow text='total' value={total} />
+                        <StatisticsRow text='average' value={average} />
+                        <StatisticsRow text='positive' value={positiveProsentage} />
+                    </tbody>
+                </table>
+            </div>
+        )
+    }
+
 }
 
-const Button = ({handleClick, text}) => (
-    <button onClick={handleClick}>
-        {text}
-    </button>
-)
+const StatisticsRow = (props) => {
+    return(
+        <tr>
+          <td>{props.text}</td>
+          <td>{props.value}</td>
+        </tr>
+    )
+}
 
-const App = (props) => {
+const App = () => {
+    // tallenna napit omaan tilaansa
+    const [good, setGood] = useState(0)
+    const [neutral, setNeutral] = useState(0)
+    const [bad, setBad] = useState(0)
 
-    const[clicks, setClicks] = useState({
-        left: 0, right: 0
-    })
-    const [allClicks, setAll] = useState([])
-
-    const handleLeftClick = () => {
-        setAll(allClicks.concat('L'))
-        const newClicks = {
-            ...clicks,
-            left: clicks.left + 1,
-        }
-        setClicks(newClicks)
+    const handleGoodClick = () => {
+        setGood(good + 1)
+    }
+    const handleNeutralClick = () => {
+        setNeutral(neutral + 1)
+    }
+    const handleBadClick = () => {
+        setBad(bad + 1)
     }
 
-    const handleRightClick = () => {
-        setAll(allClicks.concat('R'))
-        console.log('R')
-        const newClicks = {
-            ...clicks,
-            right: clicks.right + 1,
-        }
-        setClicks(newClicks)
-    }
+
 
     return (
         <div>
-            <div>
-                {clicks.left}
-                <Button handleClick={handleLeftClick} text='left' />
-                <Button handleClick={handleRightClick} text='right' />
-                {clicks.right}
-                <History allClicks={allClicks} />
-            </div>
+            <h1>give feedback</h1>
+            <button className='good' onClick={handleGoodClick}>good</button>
+            <button className='neutral' onClick={handleNeutralClick}>neutral</button>
+            <button className='bad' onClick={handleBadClick}>bad</button>
+            <h1>statistics</h1>
+            <StatisticsTable good={good} neutral={neutral} bad={bad} />
         </div>
     )
 }
 
-ReactDOM.render(
-    <App />,
-    document.getElementById('root')
+ReactDOM.render(<App />,
+  document.getElementById('root')
 )
