@@ -14,7 +14,7 @@ const Weather = (props) => {
         axios
             .get('http://api.apixu.com/v1/current.json?key=b9405c4881184af4829113200192706&q=' + props.location)
             .then(response => {
-                console.log(response.data)
+                // console.log(response.data)
                 setWeather(response.data)
             })
     },[props.location])
