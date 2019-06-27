@@ -1,6 +1,6 @@
 import React from 'react'
 import Weather from './weather'
-import './app.css'
+import './countries.css'
 
 const Countries = (props) => {
 
