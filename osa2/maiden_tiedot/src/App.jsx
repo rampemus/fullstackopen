@@ -1,25 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import style from './app.css'
+import Weather from './weather'
+import './app.css'
 
 const Countries = (props) => {
-
-    const [weather, setWeather] = useState([])
-
-    useEffect(() => {
-        axios
-            .get('https://api.openweathermap.org/data/2.5/weather?q=London')
-            .then(response => {
-                console.log(response.data)
-                setWeather(response.data)
-            })
-    },[])
 
     let filteredCountries = props.countries.filter(country => {
         return (country.name + ' ').toLowerCase().includes(props.filterWord.toLowerCase())
         //                      ^
         //for separating Niger from Nigeria user can add a space in the end
     })
+
     if (filteredCountries.length === 1 ) {
         const country = filteredCountries[0]
         return <div>
@@ -27,7 +18,8 @@ const Countries = (props) => {
             <p>capital {country.capital}</p>
             <p>population {country.population}</p>
             <p>languages {country.languages.map((language,id) => <li key={id}>{language.name}</li>)}</p>
-            <p><object id='flag' data={country.flag} type="image/svg+xml"></object></p>
+            <p><object id='flag' data={country.flag} type="image/svg+xml" aria-label='flag picture'></object></p>
+            <Weather location={country.name}/>
         </div>
     }
     if ( filteredCountries.length < 10 ){
