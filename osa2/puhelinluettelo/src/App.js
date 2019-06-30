@@ -3,15 +3,26 @@ import numberService from './services/numberService'
 import Filter from './components/filter'
 import PersonForm from './components/personform'
 import Persons from './components/persons'
+import Notification from './components/notification'
 
 const App = () => {
 
 
     const [ persons, setPersons ] = useState([])
-
+    const [notification, setNotification] = useState({
+        text: 'Notification will be printed here',
+        error: true
+    })
     const [ filterName, setFilterName ] = useState('')
     const [ newName, setNewName ] = useState('')
     const [ newNumber, setNewNumber ] = useState('')
+
+    useEffect(()=>{
+        setTimeout(
+            ()=>setNotification({text:null, error:false}),
+            3000
+        )
+    },[notification])
 
     useEffect(()=>{
         numberService
@@ -49,12 +60,16 @@ const App = () => {
                             persons.map(person => person.id !== modifiedPerson.id ? person : modifiedPerson)
                         )
                     })
+                    .catch(error => {
+                        setNotification({text:`Information of ${newPerson.name} was already been removed from server`, error:true})
+                    })
             }
         } else {
             numberService
                 .create(newPerson)
                 .then(returnedPerson => {
                     setPersons(persons.concat(returnedPerson))
+                    setNotification({text:`${newPerson.name} added to the phone book`, error:false})
                 })
 
             setNewName('')
@@ -80,6 +95,7 @@ const App = () => {
     return (
         <div>
             <h2>Phone book</h2>
+            <Notification text={notification.text} isError={notification.error}/>
             <Filter
                 filterName={filterName}
                 handleFilterNameChange={handleFilterNameChange}
