@@ -11,7 +11,7 @@ const App = () => {
     const [ persons, setPersons ] = useState([])
     const [notification, setNotification] = useState({
         text: 'Notification will be printed here',
-        error: true
+        error: false
     })
     const [ filterName, setFilterName ] = useState('')
     const [ newName, setNewName ] = useState('')
@@ -20,7 +20,7 @@ const App = () => {
     useEffect(()=>{
         setTimeout(
             ()=>setNotification({text:null, error:false}),
-            3000
+            5000
         )
     },[notification])
 
@@ -69,8 +69,8 @@ const App = () => {
                 .create(newPerson)
                 .then(returnedPerson => {
                     setPersons(persons.concat(returnedPerson))
-                    setNotification({text:`${newPerson.name} added to the phone book`, error:false})
                 })
+                .then(()=>{setNotification({text:`${newPerson.name} added to the phone book`, error:false})})
 
             setNewName('')
             setNewNumber('')
