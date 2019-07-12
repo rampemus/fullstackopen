@@ -13,7 +13,7 @@ const create = newPerson => {
 
 const modifyNumber = (id,newNumber) => {
     const requestUrl = url+`/${id}`
-    const request = axios.patch(requestUrl, { number: newNumber})
+    const request = axios.put(requestUrl, { number: newNumber})
     return request.then( response => response.data )
 }
 
