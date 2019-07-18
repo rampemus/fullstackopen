@@ -77,6 +77,8 @@ const App = () => {
                     console.log(returnedPerson)
                     setPersons(persons.concat(returnedPerson))
                     setNotification({text:`${newPerson.name} added to the phone book`, error:false})
+                    setNewName('')
+                    setNewNumber('')
                 })
                 .catch(error => {
                     console.log('here:',error.response.data.error)
@@ -87,10 +89,6 @@ const App = () => {
                         }
                     )
                 })
-
-
-            setNewName('')
-            setNewNumber('')
         }
     }
 
