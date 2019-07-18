@@ -76,9 +76,18 @@ const App = () => {
                 .then(returnedPerson => {
                     console.log(returnedPerson)
                     setPersons(persons.concat(returnedPerson))
+                    setNotification({text:`${newPerson.name} added to the phone book`, error:false})
                 })
-                .then(()=>{setNotification({text:`${newPerson.name} added to the phone book`, error:false})})
-                .catch(error => {setNotification({text:`${error.message}`, error:true})})
+                .catch(error => {
+                    console.log('here:',error.response.data.error)
+                    setNotification(
+                        {
+                            text:`${error.response.data.error}`,
+                            error:true
+                        }
+                    )
+                })
+
 
             setNewName('')
             setNewNumber('')
