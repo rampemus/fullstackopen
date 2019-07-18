@@ -18,10 +18,16 @@ const App = () => {
     const [ newNumber, setNewNumber ] = useState('')
 
     useEffect(()=>{
-        setTimeout(
-            ()=>setNotification({text:null, error:false}),
-            5000
-        )
+        // console.log('notification text:',notification.text)
+        if ( notification.text ) { //only set timeout if there is actually notification
+            // console.log('timeout added')
+            setTimeout(
+                ()=>{
+                    // console.log('setting notification to null')
+                    setNotification({text:null, error:false})
+                }
+            ,5000)
+        }
     },[notification])
 
     useEffect(()=>{
@@ -68,9 +74,11 @@ const App = () => {
             numberService
                 .create(newPerson)
                 .then(returnedPerson => {
+                    console.log(returnedPerson)
                     setPersons(persons.concat(returnedPerson))
                 })
                 .then(()=>{setNotification({text:`${newPerson.name} added to the phone book`, error:false})})
+                .catch(error => {setNotification({text:`${error.message}`, error:true})})
 
             setNewName('')
             setNewNumber('')
